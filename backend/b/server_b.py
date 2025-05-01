@@ -7,10 +7,10 @@ class ServicoB(service_pb2_grpc.ServicoBServicer):
     def CalcularEstatisticas(self, request, context):
         valores = request.valores
         if not valores:
-            return service_pb2.RespostaEstatisticas(media=0, maximo=0)
+            return service_pb2.RespostaEstatisticas(media=0, soma=0)
         media = sum(valores) / len(valores)
-        maximo = max(valores)
-        return service_pb2.RespostaEstatisticas(media=media, maximo=maximo)
+        soma = sum(valores)
+        return service_pb2.RespostaEstatisticas(media=media, soma=soma)
 
 def servir():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
