@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+// Serviço do Módulo A (Python)
+service ServicoA {
+  rpc ConsultarUsuario (RequisicaoUsuario) returns (RespostaUsuario);
+}
+
+// Serviço do Módulo B (Python)
+service ServicoB {
+  rpc CalcularEstatisticas (RequisicaoDados) returns (RespostaEstatisticas);
+}
+
+// Mensagens para A
+message RequisicaoUsuario {
+  string id = 1;
+}
+
+message RespostaUsuario {
+  string nome = 1;
+  string email = 2;
+}
+
+// Mensagens para B
+message RequisicaoDados {
+  repeated float valores = 1;
+}
+
+message RespostaEstatisticas {
+  float media = 1;
+  float soma = 2;
+}
