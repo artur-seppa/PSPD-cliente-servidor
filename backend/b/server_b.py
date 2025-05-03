@@ -1,24 +1,30 @@
-import grpc
+# backend/b/server_b.py
 from concurrent import futures
-import service_pb2
-import service_pb2_grpc
+import grpc
+import service_pb2, service_pb2_grpc
 
-class ServicoB(service_pb2_grpc.ServicoBServicer):
-    def CalcularEstatisticas(self, request, context):
-        valores = request.valores
-        if not valores:
-            return service_pb2.RespostaEstatisticas(media=0, soma=0)
-        media = sum(valores) / len(valores)
-        soma = sum(valores)
-        return service_pb2.RespostaEstatisticas(media=media, soma=soma)
+class DemoServicerB(service_pb2_grpc.DemoServiceServicer):
+    def ClientStreamSum(self, request_iterator, context):
+        total = sum(req.count for req in request_iterator)
+        return service_pb2.SumReply(sum=total)
 
-def servir():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    service_pb2_grpc.add_ServicoBServicer_to_server(ServicoB(), server)
+    def BidiChat(self, request_iterator, context):
+        for msg in request_iterator:
+            print(f"[BidiChat] recebi de {msg.sender!r}: {msg.text!r}")
+            reply = f"[{msg.sender} -> Server]: {msg.text[::-1]}"
+            print(f"[BidiChat] vou enviar: {reply!r}")
+            out = service_pb2.ChatMessage()
+            out.sender = "Server"
+            out.text = reply
+            yield out
+
+def serve():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
+    service_pb2_grpc.add_DemoServiceServicer_to_server(DemoServicerB(), server)
     server.add_insecure_port('[::]:50052')
+    print("Servidor B rodando na porta 50052…")
     server.start()
-    print("Servidor B (Python) rodando na porta 50052")
     server.wait_for_termination()
 
-if __name__ == '__main__':
-    servir()
+if __name__ == "__main__":
+    serve()

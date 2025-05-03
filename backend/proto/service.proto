@@ -1,0 +1,44 @@
+syntax = "proto3";
+package demo;
+
+// Definição do serviço com os 4 tipos de RPC
+service DemoService {
+  // 1. Unary RPC
+  rpc UnaryEcho(EchoRequest) returns (EchoReply) {}
+
+  // 2. Server-streaming RPC
+  rpc ServerStreamNums(NumRequest) returns (stream NumReply) {}
+
+  // 3. Client-streaming RPC
+  rpc ClientStreamSum(stream NumRequest) returns (SumReply) {}
+
+  // 4. Bidirectional-streaming RPC
+  rpc BidiChat(stream ChatMessage) returns (stream ChatMessage) {}
+}
+
+// Mensagens para UnaryEcho
+message EchoRequest {
+  string message = 1;
+}
+message EchoReply {
+  string message = 1;
+}
+
+// Mensagens para ServerStreamNums
+message NumRequest {
+  int32 count = 1;
+}
+message NumReply {
+  int32 number = 1;
+}
+
+// Mensagem de resposta para ClientStreamSum
+message SumReply {
+  int32 sum = 1;
+}
+
+// Mensagem para o chat bidirecional
+message ChatMessage {
+  string sender = 1; // antes era "from"
+  string text   = 2;
+}
