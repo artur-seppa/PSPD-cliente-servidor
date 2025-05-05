@@ -25,6 +25,7 @@ virt-install \
 --os-type linux \
 --os-variant generic \
 --graphics none \
+--console pty,target_type=serial \
 --noautoconsole
 
 # Criar VM2
@@ -39,6 +40,7 @@ virt-install \
 --os-type linux \
 --os-variant generic \
 --graphics none \
+--console pty,target_type=serial \
 --noautoconsole
 
 # Criar VM3
@@ -53,6 +55,7 @@ virt-install \
 --os-type linux \
 --os-variant generic \
 --graphics none \
+--console pty,target_type=serial \
 --noautoconsole
 
 echo "Todas as VMs foram criadas! Use 'sudo virsh list --all'ou acesse o 'virt-manager' para ver o status."

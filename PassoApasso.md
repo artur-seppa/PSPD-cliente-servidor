@@ -43,3 +43,7 @@ Ps: atenção com o local no qual irá manter o arquivo da imagem, pois o script
 chmod +x create-vm.sh
 ./create-vm.sh
 ```
+Necessário realizar configuração inicial de todas as vm's utilizando o comando:
+```
+setup-alpine
+```
